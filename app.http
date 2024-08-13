@@ -1,0 +1,8 @@
+
+
+// API1
+GET http://localhost:3000/players/
+
+//API2 
+
+GET http://localhost:3000/players/2/
