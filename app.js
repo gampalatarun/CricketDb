@@ -103,7 +103,7 @@ app.get('/matches/:matchId/', async (request, response) => {
 //API 5
 app.get('/players/:playerId/matches', async (request, response) => {
   const {playerId} = request.params
-  const matchesQUery = `SELECT match_id,match,year FROM match_details NATURAL JOIN player_details WHERE player_id=${playerId};`
+  const matchesQUery = `SELECT * FROM match_details NATURAL JOIN player_match_score WHERE player_id=${playerId};`
   const uniqueplayerDetails = await db.all(matchesQUery)
   response.send(
     uniqueplayerDetails.map(eachplayer =>
