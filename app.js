@@ -112,4 +112,33 @@ app.get('/players/:playerId/matches', async (request, response) => {
   )
 })
 
+//API 6
+app.get('/matches/:matchId/players', async (request, response) => {
+  const {matchId} = request.params
+  const getmatchQuery = `SELECT player_id,player_name FROM player_details NATURAL JOIN player_match_score WHERE match_id=${matchId};`
+  const specificmatchDetails = await db.all(getmatchQuery)
+  response.send(
+    specificmatchDetails.map(specificplayer =>
+      ConvertsnaketoCamelCaseofPlayerDetails(specificplayer),
+    ),
+  )
+})
+
+//API7
+
+app.get('/players/:playerId/playerScores', async (request, response) => {
+  const {playerId} = request.params
+  const getstaticsQUERY = `SELECT
+    player_details.player_id AS playerId,
+    player_details.player_name AS playerName,
+    SUM(player_match_score.score) AS totalScore,
+    SUM(fours) AS totalFours,
+    SUM(sixes) AS totalSixes FROM 
+    player_details INNER JOIN player_match_score ON
+    player_details.player_id = player_match_score.player_id
+    WHERE player_details.player_id = ${playerId};`
+
+  const stasticDetails = await db.get(getstaticsQUERY)
+  response.send(stasticDetails)
+})
 module.exports = app
